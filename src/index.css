@@ -5,6 +5,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: grid;
+  place-content: center;
+}
+
+textarea {
+  font-family: inherit;
+  margin-bottom: 8px;
+  padding-left: 5px;
 }
 
 code {

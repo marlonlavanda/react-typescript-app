@@ -1,17 +1,28 @@
-import { useState } from "react";
+import useNewSubForm from "../hooks/useNewSubForm";
+import { Sub } from "../types";
 
-const Form = () => {
-  const [inputValues, setInputValues] = useState({
-    nick: "",
-    subMonths: 0,
-    avatar: "",
-    description: "",
-  });
-  const handleSubmit = () => {};
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValues({
-      ...inputValues,
-      [e.target.name]: e.target.value,
+interface FormProps {
+  onNewSub: (newSub: Sub) => void;
+}
+
+const Form = ({ onNewSub }: FormProps) => {
+  const [inputValues, dispatch] = useNewSubForm();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onNewSub(inputValues);
+    dispatch({ type: "clear" });
+  };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    dispatch({
+      type: "change_value",
+      payload: {
+        inputName: name,
+        inputValue: value,
+      },
     });
   };
   return (
@@ -31,15 +42,14 @@ const Form = () => {
           placeholder="subMonths"
           onChange={handleChange}
         />
-        <input
-          value={inputValues.avatar}
-          type="text"
+        <textarea
+          value={inputValues.description}
           name="description"
           placeholder="description"
           onChange={handleChange}
         />
         <input
-          value={inputValues.description}
+          value={inputValues.avatar}
           type="text"
           name="avatar"
           placeholder="avatar"
